@@ -1,0 +1,186 @@
+#include <16F887.h>
+#fuses INTRC_IO, PUT, NOWDT, NOMCLR
+#use delay(clock = 8MHz)
+#include <TV_LCD_4BIT.c>
+
+//================ SERVO ==================
+#define SERVO_PIN PIN_C2
+
+#define    _slcd_  1           // Neu ban phim, nut nhan bi doi thi sua so nay
+#define    KEY4x3_ROW_0    PIN_B0
+#define    KEY4x3_ROW_1    PIN_B1
+#define    KEY4x3_ROW_2    PIN_B2
+#define    KEY4x3_ROW_3    PIN_B3
+#define    KEY4x3_COL_0    PIN_B4
+#define    KEY4x3_COL_1    PIN_B5
+#define    KEY4x3_COL_2    PIN_B6
+
+const char keymap[12] = {'1','4','7','*',
+                         '2','5','8','0',
+                         '3','6','9','#'};
+
+unsigned int8 keyread()
+{
+     if (!INPUT(KEY4x3_ROW_0)) return 0;             
+     else if (!INPUT(KEY4x3_ROW_1)) return 1;                 
+     else if (!INPUT(KEY4x3_ROW_2)) return 2;              
+     else if (!INPUT(KEY4x3_ROW_3)) return 3; 
+     return 0xff;
+}
+char key_4x3_dw()
+{      
+      unsigned int8 mp=0xff,tam;
+      static int8 cot=0,dem=0;
+      static int1 tt=0;
+      tam = keyread();
+      if((tam!=0xff)&&(!tt))
+      {
+          dem++;
+          if(dem>=_slcd_)
+          {
+               mp = tam + cot*4;
+               tt=1;              
+          }
+       }
+       else if((tam==0xff)&&(!tt))
+       {
+          dem=0;cot++;cot%=4;
+          if(cot==0) {output_high(KEY4x3_COL_2); output_low(KEY4x3_COL_0);}
+          if(cot==1) {output_high(KEY4x3_COL_0); output_low(KEY4x3_COL_1);}
+          if(cot==2) {output_high(KEY4x3_COL_1); output_low(KEY4x3_COL_2);}
+       }
+       else if((tam!=0xff)&&(tt))   dem=_slcd_;   
+       else if(tam==0xff)  
+       { 
+          dem++;
+          if(dem>=2*_slcd_){tt=0;dem=0;}
+       }
+       return mp;
+}
+
+void servo_dong()
+{
+   int8 m;
+   for(m=0;m<=50;m++) 
+   {                                            
+      output_high(SERVO_PIN);                             
+      delay_ms (1);                          
+      output_low(SERVO_PIN);          
+      delay_us (1000);             
+      delay_ms (18);
+   }         
+}
+
+void servo_mo()
+{
+   int8 m;
+   for(m=0;m<=50;m++) 
+   {                                            
+      output_high(SERVO_PIN);                             
+      delay_ms (1);    
+      delay_us (1000); 
+      output_low(SERVO_PIN);                      
+      delay_ms (18);
+   }         
+}
+
+//================ MAIN ==================
+char mk[5] = {'1','2','3','4','5'}; // mat khau mac dinh
+char str[5] = {' ',' ',' ',' ',' '};
+unsigned int8 j = 0, epp = 0;
+int1 s = 0;
+unsigned int8 mp;
+
+void main()
+{
+    set_tris_b(0x0f);
+    port_b_pullups(0xff);
+    set_tris_c(0b00000000);
+    set_tris_d(0x00);
+    servo_dong();
+    delay_ms(500);
+
+    lcd_setup();
+    delay_ms(1000);
+    
+    epp = read_eeprom(6);
+    if(epp != 9)
+    {
+       lcd_goto_xy(0,0);
+       lcd_data("> CAI DAT MA PIN");
+       lcd_goto_xy(0,1);
+       lcd_data("> HAY NHAP 5 SO!");
+    }
+    else
+    {
+       lcd_goto_xy(0,0);
+       lcd_data("HAY NHAP MA PIN ");
+       lcd_goto_xy(0,1);
+       lcd_data("DE MO KHOA CUA  ");
+    }
+    
+    
+ 
+    
+    while(TRUE)
+    {
+         mp = key_4x3_dw();
+         if(mp!=0xff)
+         {
+         char key = keymap[mp];
+            if(key >= '0' && key <= '9')
+            {
+                if(j < 5)
+                {
+                    str[j] = key;
+                    lcd_goto_xy(j,1);
+                    lcd_data(str[j]);
+                    delay_ms(500);
+                    lcd_goto_xy(j,1);
+                    lcd_data('*'); 
+                    j++;
+
+                    if(j == 5) s = 1; 
+                }
+            }
+
+            if(s == 1)
+            {
+                int1 correct = TRUE;
+                int8 k;
+                for(k=0;k<5;k++)
+                {
+                    if(str[k] != mk[k]) { correct = FALSE; break; }
+                }
+
+                lcd_goto_xy(0,0);
+                if(correct)
+                {
+                    lcd_data("  DUNG MAT KHAU  ");
+                    lcd_goto_xy(0,1);
+                    lcd_data("=> CUA DA MO.....");
+                    servo_mo(); 
+                    delay_ms(5000);
+                    servo_dong();   
+                }
+                else
+                {
+                    lcd_data(" SAI MAT KHAU !!!");
+                    lcd_goto_xy(0,1);
+                    lcd_data("VUI LONG NHAP LAI");
+                }
+                delay_ms(1500);
+
+                j = 0;
+                s = 0;
+                int8 h;
+                for(h=0;h<5;h++) {str[h] = ' ';}
+                lcd_goto_xy(0,0);
+                lcd_data("HAY NHAP MA PIN ");
+                lcd_goto_xy(0,1);
+                lcd_data("DE MO KHOA CUA  ");
+            }
+        }
+    }
+}
+

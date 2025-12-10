@@ -1,0 +1,155 @@
+004-005 @READ_PROGRAM_MEMORY8.P1
+004-005 @WRITE_PROGRAM_MEMORY8.P2
+015     CCP_1
+015     CCP_1_LOW
+016     CCP_1_HIGH
+01B     CCP_2
+01B     CCP_2_LOW
+01C     CCP_2_HIGH
+020     key_4x3_dw.cot
+021     key_4x3_dw.dem
+022.0   key_4x3_dw.tt
+022.1   s
+022.2   set
+022.3   clr
+023     @TRIS_C
+024-028 mk
+029-02D str
+02E-032 strs
+033     j
+034     t
+035     epp
+036     sai
+037     mp
+038     MAIN.a
+039     MAIN.w
+03A     MAIN.key
+03B.0   MAIN.correct
+03B.1   MAIN.cor
+03C     MAIN.k
+03D     MAIN.h
+03E     MAIN.b
+03F     MAIN.keys
+040     MAIN.kt
+041     MAIN.q
+042     MAIN.q
+043     MAIN.c
+044     servo_mo.m
+044     servo_dong.m
+044     lcd_goto_xy.y
+044     key_4x3_dw.mp
+044     tone.sl
+044     MAIN.@SCRATCH1
+044     @PSTRINGC7_624.@SCRATCH1
+045     lcd_goto_xy.x
+045-046 tone.tg
+045     key_4x3_dw.tam
+045     MAIN.@SCRATCH2
+045     @PSTRINGC7_624.@SCRATCH2
+046     lcd_goto_xy.@SCRATCH1
+046     @PSTRINGC7_624.@SCRATCH3
+047     lcd_comand.d
+047     lcd_data.d
+047     tone.l
+047     @PSTRINGC7_624.@SCRATCH4
+048     lcd_comand.@SCRATCH1
+048     lcd_data.@SCRATCH1
+048     tone.@SCRATCH1
+049     @delay_ms1.P1
+049     lcd_write_4bit.d
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+107.6   C1OUT
+108.6   C2OUT
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+
+ROM Allocation:
+000004  dc.call
+000008  dc.data
+00000C  keymap.call
+000010  keymap.data
+00001C  @const667.call
+000025  @const669.call
+00002E  @const670.call
+000037  @const671.call
+000040  @const672.call
+000049  @const673.call
+000052  @const675.call
+00005B  @const676.call
+000064  @const678.call
+00006D  @const682.call
+000076  @const683.call
+00007F  @const684.call
+000088  @const685.call
+000091  @const686.call
+00009A  @const687.call
+0000A3  @const688.call
+0000AC  @const689.call
+0000B5  @const690.call
+0000BE  @const691.call
+0000C7  @const694.call
+0000D0  @const695.call
+0000D9  @const699.call
+0000E2  @const700.call
+0000EB  @const702.call
+0000F4  @const703.call
+0000FD  @const704.call
+000106  @const705.call
+00010F  @const707.call
+000118  @const708.call
+000121  @const709.call
+00012A  @const710.call
+000133  @const712.call
+00013C  @delay_ms1
+000150  servo_dong
+00016D  lcd_write_4bit
+00019A  lcd_comand
+0001A9  lcd_setup
+0001C1  lcd_goto_xy
+0001C8  lcd_data
+0001D7  @PSTRINGC7_624
+00022D  doc_ma_pin
+00026F  tone
+000299  key_4x3_dw
+00029B  keyread
+000314  servo_mo
+000333  MAIN
+000333  @cinit1
+000356  @cinit2
+
+Project Directory:
+    F:\KHOA_CUA_MA_PHIM_PIC16F887_SERVO\CODE\
+
+Project Files:
+    main.c                                                  [29-Nov-25 23:33  CRC=D26C072D]
+    C:\Program Files (x86)\PICC\Devices\16F887.h            [12-Nov-13 14:35  CRC=6CB1A611]
+    TV_LCD_4BIT.c                                           [08-Jun-25 13:06  CRC=FF3620D8]
+
+Source signature=3D89EEEE
+
+Units:
+    main (main)
+
+Compiler Settings:
+    Processor:      PIC16F887
+    Pointer Size:   16
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    XREF file:   main.xsym
+    Errors:      main.err
+    Ext Symbols: main.esym
+    INHX8:       main.hex
+    Symbols:     main.sym
+    List:        main.lst
+    Debug/COFF:  main.cof
+    Project:     main.ccspjt
+    Call Tree:   main.tre
+    Statistics:  main.STA
